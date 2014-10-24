@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace FiledRecipes.Domain
 {
@@ -137,7 +138,7 @@ namespace FiledRecipes.Domain
             RecipeReadStatus status = new RecipeReadStatus();
 
 
-            using (StreamReader reader = new StreamReader(@"Recipes.txt"))
+            using (StreamReader reader = new StreamReader(@"Recipes.txt", System.Text.Encoding.UTF7))
             {
 
                 string line;
@@ -162,7 +163,7 @@ namespace FiledRecipes.Domain
                         case RecipeReadStatus.New:
                             recept = new Recipe(line);
                             lista.Add(recept);
-                            continue;
+                            break;
                         case RecipeReadStatus.Ingredient:
                             string[] ingredients = line.Split(';');
 
@@ -176,11 +177,11 @@ namespace FiledRecipes.Domain
                                 throw new FileFormatException();
                             }
                             recept.Add(ingredienser);
-                           
-                            continue;
+
+                            break;
                         case RecipeReadStatus.Instruction:
                             recept.Add(line);
-                            continue;
+                            break;
                         case RecipeReadStatus.Indefinite:
                             throw new FileFormatException();
 
@@ -194,7 +195,35 @@ namespace FiledRecipes.Domain
       
         public void Save()
         {
- 
+            
+            using (StreamWriter writer = new StreamWriter(@"Recipes.txt", false, Encoding.Default)) 
+            {
+               
+
+                foreach (IRecipe recipe in _recipes)
+                {
+                    writer.WriteLine(SectionRecipe);
+                    writer.WriteLine(recipe.Name);
+                    writer.WriteLine(SectionIngredients);
+
+                    foreach (IIngredient ingrediens in recipe.Ingredients)
+                    {
+                        writer.WriteLine("{0};{1};{2}", ingrediens.Amount, ingrediens.Measure, ingrediens.Name);
+                    }
+
+                    writer.WriteLine(SectionInstructions);
+
+                    foreach (string instruction in recipe.Instructions)
+                    {
+                        writer.WriteLine(instruction);
+                    }
+                    
+
+                }
+
+            }
+            
+
         }
 
     }

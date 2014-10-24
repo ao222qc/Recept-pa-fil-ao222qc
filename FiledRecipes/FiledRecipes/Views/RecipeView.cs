@@ -30,6 +30,12 @@ namespace FiledRecipes.Views
         }
         public void Show(IEnumerable<IRecipe> recipes)
         {
+
+            foreach (IRecipe recept in recipes)
+            {
+                Show(recept);
+                ContinueOnKeyPressed();
+            }
  
         }
    
