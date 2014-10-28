@@ -131,7 +131,7 @@ namespace FiledRecipes.Domain
         //protected enum Present {Recept, Ingredienser, Instruktioner}
         public void Load()
         {
-
+            //lista
             List<IRecipe> lista = new List<IRecipe>();
             Recipe recept = null;
             
